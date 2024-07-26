@@ -1,6 +1,10 @@
 package br.com.estoque.gerenciamento.user;
 
-public enum UserCargos {
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
+
+public enum UserCargos{
     ADMIN("admin"),
     RH("rh"),
     //funções RH -> CRUD os usuários, gerencia a folha de pagamento (Salários, tempo de empresa, cargo), permissões (CRUD)
