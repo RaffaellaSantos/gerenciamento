@@ -36,7 +36,7 @@ public class User implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.cargo == UserCargos.ADMIN) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        } else if (this.cargo == UserCargos.ADMIN) {
+        } else if (this.cargo == UserCargos.RH) {
             return List.of(new SimpleGrantedAuthority("ROLE_RH"));
         } else {
             return List.of(new SimpleGrantedAuthority("ROLE_ESTOQUE"));

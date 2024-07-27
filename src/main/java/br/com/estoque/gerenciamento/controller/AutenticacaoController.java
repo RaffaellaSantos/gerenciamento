@@ -1,7 +1,9 @@
 package br.com.estoque.gerenciamento.controller;
 
 import br.com.estoque.gerenciamento.dto.AutenticacaoDto;
+import br.com.estoque.gerenciamento.dto.LoginResponseDto;
 import br.com.estoque.gerenciamento.dto.RegistroDto;
+import br.com.estoque.gerenciamento.infra.security.TokenService;
 import br.com.estoque.gerenciamento.repository.UserRepository;
 import jakarta.validation.Valid;
 import br.com.estoque.gerenciamento.user.User;
@@ -19,8 +21,8 @@ public class AutenticacaoController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-//    @Autowired
-//    private TokenService tokenService;
+    @Autowired
+    private TokenService tokenService;
 
     @Autowired
     private UserRepository repository;
@@ -30,10 +32,10 @@ public class AutenticacaoController {
     public ResponseEntity login(@RequestBody @Valid AutenticacaoDto dto){
         var usernameSenha = new UsernamePasswordAuthenticationToken(dto.login(), dto.senha());
         var auth = this.authenticationManager.authenticate(usernameSenha);
-        return ResponseEntity.ok().build();
-//        var token = tokenService.gerarToken((User)auth.getPrincipal());
-//
-//        return ResponseEntity.ok(new LoginResponseDto(token));
+
+        var token = tokenService.gerarToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDto(token));
     }
 
     @PostMapping("/registro")
