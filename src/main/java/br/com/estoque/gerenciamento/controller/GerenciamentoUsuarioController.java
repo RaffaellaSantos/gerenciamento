@@ -8,6 +8,7 @@ import br.com.estoque.gerenciamento.repository.UserRepository;
 import br.com.estoque.gerenciamento.user.User;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class GerenciamentoUsuarioController {
     private UserRepository repository;
 
     @PostMapping("/registro")
-    public ResponseEntity<Void> registro(@RequestBody @Valid RegistroDto dto) {
+    public ResponseEntity<String> registro(@RequestBody @Valid RegistroDto dto) {
         if (this.repository.findByLogin(dto.login()) != null) {
             return ResponseEntity.badRequest().build();
         }
@@ -33,7 +34,7 @@ public class GerenciamentoUsuarioController {
         User novoUser = new User(dto.login(), senhaCrypto, dto.cargo());
 
         this.repository.save(novoUser);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body("Usuário registrado");
     }
 
     @GetMapping
@@ -43,18 +44,18 @@ public class GerenciamentoUsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuariosResponseDto> procurarUsuario(@PathVariable String id){
+    public ResponseEntity<Object> procurarUsuario(@PathVariable String id){
         Optional<User> usuario = repository.findById(id);
         if (usuario.isPresent()) {
             UsuariosResponseDto usuarioDto = new UsuariosResponseDto(usuario.get());
             return ResponseEntity.ok().body(usuarioDto);
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> atualizarUsuário(@PathVariable String id, @RequestBody UsuariosRequestDto dto){
+    public ResponseEntity<String> atualizarUsuário(@PathVariable String id, @RequestBody UsuariosRequestDto dto){
         Optional<User> usuario = repository.findById(id);
         if (usuario.isPresent()) {
             User user = usuario.get();
@@ -67,21 +68,20 @@ public class GerenciamentoUsuarioController {
                 user.setCargo(dto.getCargo());
             }
             repository.save(user);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("Usuário Atualizado");
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
         }
     }
 
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarUsuario(@PathVariable String id) {
+    public ResponseEntity<String> deletarUsuario(@PathVariable String id) {
         Optional<User> usuario = repository.findById(id);
         if (usuario.isPresent()) {
             repository.delete(usuario.get());
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
         }
     }
 }

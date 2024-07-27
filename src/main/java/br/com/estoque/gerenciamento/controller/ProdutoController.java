@@ -5,8 +5,8 @@ import br.com.estoque.gerenciamento.dto.ProdutoResponseDto;
 import br.com.estoque.gerenciamento.model.Produto;
 import br.com.estoque.gerenciamento.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,10 +21,10 @@ public class ProdutoController {
     private ProdutoRepository repository;
 
     @PostMapping
-    public ResponseEntity<Void> criarProduto(@RequestBody ProdutoRequestDto dto) {
+    public ResponseEntity<String> criarProduto(@RequestBody ProdutoRequestDto dto) {
         Produto produto = new Produto(dto);
         repository.save(produto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body("Produto criado");
     }
 
 
@@ -35,36 +35,36 @@ public class ProdutoController {
     }//olha o video de "SpringBoot" tinha uma função de link entre o getId e o getAll, implementar
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProdutoResponseDto> procurarProdutoPorId(@PathVariable Long id) {
+    public ResponseEntity<Object> procurarProdutoPorId(@PathVariable Long id) {
         Optional<Produto> produtoOptional = repository.findById(id);
         if (produtoOptional.isPresent()) {
             ProdutoResponseDto produtoResponseDto = new ProdutoResponseDto(produtoOptional.get());
             return ResponseEntity.ok(produtoResponseDto);
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> atualizarProduto(@PathVariable Long id, @RequestBody ProdutoRequestDto dto) {
+    public ResponseEntity<String> atualizarProduto(@PathVariable Long id, @RequestBody ProdutoRequestDto dto) {
         Optional<Produto> produtoOptional = repository.findById(id);
         if (produtoOptional.isPresent()) {
             Produto produto = produtoOptional.get();
-            produto.atualizarDados(dto); // Método que você deve implementar na classe Produto para atualizar os dados
+            produto.atualizarDados(dto);
             repository.save(produto);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("Produto atualizado com sucesso");
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarProduto(@PathVariable Long id) {
+    public ResponseEntity<String> deletarProduto(@PathVariable Long id) {
         if (repository.existsById(id)) {
             repository.deleteById(id);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("Produto deletado com sucesso");
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não econtrado");
         }
     }
 }
