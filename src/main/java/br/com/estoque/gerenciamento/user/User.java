@@ -1,5 +1,6 @@
 package br.com.estoque.gerenciamento.user;
 
+import br.com.estoque.gerenciamento.dto.UsuariosRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Getter
+@Setter
 public class User implements UserDetails{
 
     @Id
@@ -33,13 +35,11 @@ public class User implements UserDetails{
         this.cargo = cargo;
     }
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(cargo.getCargo()));
     }
-
-
-
 
     @Override
     public String getPassword() {
