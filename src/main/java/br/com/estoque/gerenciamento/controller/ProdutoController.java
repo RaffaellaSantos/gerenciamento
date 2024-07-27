@@ -6,6 +6,7 @@ import br.com.estoque.gerenciamento.model.Produto;
 import br.com.estoque.gerenciamento.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class ProdutoController {
         repository.save(produto);
         return ResponseEntity.ok().build();
     }
+
 
     @GetMapping
     public ResponseEntity<List<ProdutoResponseDto>> listarProdutos() {

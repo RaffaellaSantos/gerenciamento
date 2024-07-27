@@ -28,14 +28,13 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/registro").hasAnyRole("ADMIN", "RH")
-                        .requestMatchers(HttpMethod.POST, "/produto").hasAnyRole("ADMIN", "ESTOQUE")
+                        .requestMatchers(HttpMethod.POST, "/auth/registro").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/produto").hasRole("ESTOQUE") // Uso de hasAuthority
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Table(name = "users")
@@ -34,14 +35,9 @@ public class User implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.cargo == UserCargos.ADMIN) {
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        } else if (this.cargo == UserCargos.RH) {
-            return List.of(new SimpleGrantedAuthority("ROLE_RH"));
-        } else {
-            return List.of(new SimpleGrantedAuthority("ROLE_ESTOQUE"));
-        }
+        return Collections.singletonList(new SimpleGrantedAuthority(cargo.getCargo()));
     }
+
 
 
 

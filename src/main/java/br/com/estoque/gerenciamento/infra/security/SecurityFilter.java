@@ -1,5 +1,6 @@
 package br.com.estoque.gerenciamento.infra.security;
 
+import br.com.estoque.gerenciamento.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import br.com.estoque.gerenciamento.repository.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -26,15 +27,25 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var token = this.recoverToken(request);
-        if(token != null) {
+        if (token != null) {
             var login = tokenService.validarToken(token);
-            UserDetails user = userRepository.findByLogin(login);
-
-            var autenticacao = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(autenticacao);
+            if (login != null) {
+                UserDetails user = userRepository.findByLogin(login);
+                if (user != null) {
+                    var autenticacao = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(autenticacao);
+                    System.out.println("Usuário autenticado: " + user.getUsername());
+                    System.out.println("Autoridades do usuário: " + user.getAuthorities());
+                } else {
+                    System.out.println("Usuário não encontrado: " + login);
+                }
+            } else {
+                System.out.println("Token inválido.");
+            }
         }
         filterChain.doFilter(request, response);
     }
+
 
     private String recoverToken(HttpServletRequest request) {
         var authHeader = request.getHeader("Authorization");
@@ -42,4 +53,3 @@ public class SecurityFilter extends OncePerRequestFilter {
         return authHeader.replace("Bearer ", "");
     }
 }
-

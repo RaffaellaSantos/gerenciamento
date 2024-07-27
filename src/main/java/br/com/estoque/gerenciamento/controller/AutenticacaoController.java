@@ -21,15 +21,15 @@ public class AutenticacaoController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
     @Autowired
     private TokenService tokenService;
 
     @Autowired
     private UserRepository repository;
 
-
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AutenticacaoDto dto){
+    public ResponseEntity<LoginResponseDto> login(@RequestBody @Valid AutenticacaoDto dto) {
         var usernameSenha = new UsernamePasswordAuthenticationToken(dto.login(), dto.senha());
         var auth = this.authenticationManager.authenticate(usernameSenha);
 
@@ -50,8 +50,5 @@ public class AutenticacaoController {
         this.repository.save(novoUser);
         return ResponseEntity.ok().build();
     }
-
-
-
-
 }
+
