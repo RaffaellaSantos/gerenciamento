@@ -1,0 +1,382 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "REST API Gerenciamente: Produtos e Usuários",
+    "description": "# 🚀 Sobre\n\nEsta documentação tem como objetivo explicar o funcionamento de cada operação CRUD que a API Gerenciamentos faz.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "localhost://"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Login",
+      "description": "É necessário fazer este passo primeiro antes de seguir com as outras funções."
+    },
+    {
+      "name": "Produtos",
+      "description": "Gerenciamento de estoque, com funções de criação, listagem, atualização e deleção de itens."
+    },
+    {
+      "name": "Usuários",
+      "description": "Gerenciamento de usuários, com funções de criação, listagem, atualização e deleção."
+    }
+  ],
+  "paths": {
+    "/191/auth/login": {
+      "post": {
+        "tags": [
+          "Login"
+        ],
+        "summary": "Login",
+        "description": "Submetendo o login e senha é possivel fazer login no sistema. Será devolvido um token que deve ser colocado em authorization -> Bearear Token. Para todos os acessos serem liberados",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "login": "Adriana",
+                  "senha": "1234"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/191/produtos": {
+      "post": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Criar",
+        "description": "Essa request é a criação do produto",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "nome": "Sprite",
+                  "descricao": "Refrigerante",
+                  "preco": 6,
+                  "codigo": "542",
+                  "fornecedor": "Sprite",
+                  "categoria": "bebidas",
+                  "validade": "30/02/2025",
+                  "image": "Sem imagem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Listar",
+        "description": "Lista todos os produtos cadastrados no banco de dados",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/191/produtos/{id}": {
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Listar {id}",
+        "description": "Encontra um produto especifico na lista de produtos com base no seu id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Atualizar",
+        "description": "Encontra um produto específico e o atualiza.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "nome": "Baré",
+                  "descricao": "Refrigerante",
+                  "preco": 5.5,
+                  "codigo": "159",
+                  "fornecedor": "Baré",
+                  "categoria": "bebidas",
+                  "validade": "30/01/2025",
+                  "image": "Sem imagem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/191/produtos{id}": {
+      "delete": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Deletar",
+        "description": "Deleta um produto da lista com base no id fornecido",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/191/controleUsuarios/registro": {
+      "post": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Usuario/registro",
+        "description": "Registra um novo usuário, deve ser fornecido nome, senha e cargo. Existem três cargos e devem ser escritos da seguinte forma: ROLE_ADMIN, ROLE_RH, ROLE_ESTOQUE",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "login": "Paulo",
+                  "senha": "1234",
+                  "cargo": "ROLE_ADMIN"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/191/controleUsuarios": {
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Listar",
+        "description": "Lista os funcionarios registrados no sistema.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/191/controleUsuarios/{id}": {
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Listar {id}",
+        "description": "Devolve um funcionário específico.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/191/controleUsuarios/6dabbb17-4edd-4608-9187-d828f986de2a": {
+      "put": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Atualizar",
+        "description": "Pode-se atualizar a senha, login e cargo.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "login": "Paulo",
+                  "senha": "1234",
+                  "cargo": "ROLE_RH"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Deletar",
+        "description": "Deleta um funcionário específico com base no id fornecido.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

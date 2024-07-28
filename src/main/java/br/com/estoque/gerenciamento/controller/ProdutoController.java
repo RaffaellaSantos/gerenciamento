@@ -7,6 +7,7 @@ import br.com.estoque.gerenciamento.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,12 +28,11 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Produto criado");
     }
 
-
     @GetMapping
     public ResponseEntity<List<ProdutoResponseDto>> listarProdutos() {
         List<ProdutoResponseDto> produtos = repository.findAll().stream().map(ProdutoResponseDto::new).collect(Collectors.toList());
         return ResponseEntity.ok(produtos);
-    }//olha o video de "SpringBoot" tinha uma função de link entre o getId e o getAll, implementar
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> procurarProdutoPorId(@PathVariable Long id) {

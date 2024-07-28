@@ -1,0 +1,508 @@
+{
+	"info": {
+		"_postman_id": "72797077-0357-43af-805c-71bf538624af",
+		"name": "REST API Gerenciamente: Produtos e Usuários",
+		"description": "# 🚀 Sobre\n\nEsta documentação tem como objetivo explicar o funcionamento de cada operação CRUD que a API Gerenciamentos faz.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37206738"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"login\": \"Adriana\",\n    \"senha\": \"1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9191/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "9191",
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Submetendo o login e senha é possivel fazer login no sistema. Será devolvido um token que deve ser colocado em authorization -> Bearear Token. Para todos os acessos serem liberados"
+					},
+					"response": []
+				}
+			],
+			"description": "É necessário fazer este passo primeiro antes de seguir com as outras funções."
+		},
+		{
+			"name": "Produtos",
+			"item": [
+				{
+					"name": "Criar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoLWFwaSIsInN1YiI6IkFkcmlhbmEiLCJleHAiOjE3MjIxOTY5OTIsImF1dGhvcml0aWVzIjpbIkFETUlOIl19.JTxVgHadcnn3aMbdHblZxiVHJd4ZXLl5LoO3QNX1EzI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\n        \"nome\": \"Sprite\",\n        \"descricao\": \"Refrigerante\",\n        \"preco\": 6.00,\n        \"codigo\": \"542\",\n        \"fornecedor\": \"Sprite\",\n        \"categoria\": \"bebidas\",\n        \"validade\": \"30/02/2025\",\n        \"image\": \"Sem imagem\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9191/produtos",
+							"host": [
+								"localhost"
+							],
+							"port": "9191",
+							"path": [
+								"produtos"
+							]
+						},
+						"description": "Essa request é a criação do produto"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoLWFwaSIsInN1YiI6IkFkcmlhbmEiLCJleHAiOjE3MjIxOTY5OTIsImF1dGhvcml0aWVzIjpbIkFETUlOIl19.JTxVgHadcnn3aMbdHblZxiVHJd4ZXLl5LoO3QNX1EzI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9191/produtos",
+							"host": [
+								"localhost"
+							],
+							"port": "9191",
+							"path": [
+								"produtos"
+							]
+						},
+						"description": "Lista todos os produtos cadastrados no banco de dados"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar {id}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9191/produtos/{id}",
+							"host": [
+								"localhost"
+							],
+							"port": "9191",
+							"path": [
+								"produtos",
+								"{id}"
+							]
+						},
+						"description": "Encontra um produto especifico na lista de produtos com base no seu id."
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoLWFwaSIsInN1YiI6IkFkcmlhbmEiLCJleHAiOjE3MjIxOTY5OTIsImF1dGhvcml0aWVzIjpbIkFETUlOIl19.JTxVgHadcnn3aMbdHblZxiVHJd4ZXLl5LoO3QNX1EzI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\n        \"nome\": \"Baré\",\n        \"descricao\": \"Refrigerante\",\n        \"preco\": 5.50,\n        \"codigo\": \"159\",\n        \"fornecedor\": \"Baré\",\n        \"categoria\": \"bebidas\",\n        \"validade\": \"30/01/2025\",\n        \"image\": \"Sem imagem\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9191/produtos/{id}",
+							"host": [
+								"localhost"
+							],
+							"port": "9191",
+							"path": [
+								"produtos",
+								"{id}"
+							]
+						},
+						"description": "Encontra um produto específico e o atualiza."
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoLWFwaSIsInN1YiI6IkFkcmlhbmEiLCJleHAiOjE3MjIxOTY5OTIsImF1dGhvcml0aWVzIjpbIkFETUlOIl19.JTxVgHadcnn3aMbdHblZxiVHJd4ZXLl5LoO3QNX1EzI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9191/produtos{id}",
+							"host": [
+								"localhost"
+							],
+							"port": "9191",
+							"path": [
+								"produtos{id}"
+							]
+						},
+						"description": "Deleta um produto da lista com base no id fornecido"
+					},
+					"response": []
+				}
+			],
+			"description": "Gerenciamento de estoque, com funções de criação, listagem, atualização e deleção de itens."
+		},
+		{
+			"name": "Usuários",
+			"item": [
+				{
+					"name": "Usuario/registro",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoLWFwaSIsInN1YiI6IkFkcmlhbmEiLCJleHAiOjE3MjIxOTY5OTIsImF1dGhvcml0aWVzIjpbIkFETUlOIl19.JTxVgHadcnn3aMbdHblZxiVHJd4ZXLl5LoO3QNX1EzI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\n        \"login\": \"Paulo\",\n        \"senha\": \"1234\",\n        \"cargo\": \"ROLE_ADMIN\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9191/controleUsuarios/registro",
+							"host": [
+								"localhost"
+							],
+							"port": "9191",
+							"path": [
+								"controleUsuarios",
+								"registro"
+							]
+						},
+						"description": "Registra um novo usuário, deve ser fornecido nome, senha e cargo. Existem três cargos e devem ser escritos da seguinte forma: ROLE_ADMIN, ROLE_RH, ROLE_ESTOQUE"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoLWFwaSIsInN1YiI6IkFkcmlhbmEiLCJleHAiOjE3MjIxOTY5OTIsImF1dGhvcml0aWVzIjpbIkFETUlOIl19.JTxVgHadcnn3aMbdHblZxiVHJd4ZXLl5LoO3QNX1EzI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9191/controleUsuarios",
+							"host": [
+								"localhost"
+							],
+							"port": "9191",
+							"path": [
+								"controleUsuarios"
+							]
+						},
+						"description": "Lista os funcionarios registrados no sistema."
+					},
+					"response": []
+				},
+				{
+					"name": "Listar {id}",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoLWFwaSIsInN1YiI6IkFkcmlhbmEiLCJleHAiOjE3MjIxOTY5OTIsImF1dGhvcml0aWVzIjpbIkFETUlOIl19.JTxVgHadcnn3aMbdHblZxiVHJd4ZXLl5LoO3QNX1EzI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9191/controleUsuarios/{id}",
+							"host": [
+								"localhost"
+							],
+							"port": "9191",
+							"path": [
+								"controleUsuarios",
+								"{id}"
+							]
+						},
+						"description": "Devolve um funcionário específico."
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoLWFwaSIsInN1YiI6IkFkcmlhbmEiLCJleHAiOjE3MjIxOTY5OTIsImF1dGhvcml0aWVzIjpbIkFETUlOIl19.JTxVgHadcnn3aMbdHblZxiVHJd4ZXLl5LoO3QNX1EzI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"login\": \"Paulo\",\r\n        \"senha\": \"1234\",\r\n        \"cargo\": \"ROLE_RH\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9191/controleUsuarios/6dabbb17-4edd-4608-9187-d828f986de2a",
+							"host": [
+								"localhost"
+							],
+							"port": "9191",
+							"path": [
+								"controleUsuarios",
+								"6dabbb17-4edd-4608-9187-d828f986de2a"
+							]
+						},
+						"description": "Pode-se atualizar a senha, login e cargo."
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoLWFwaSIsInN1YiI6IkFkcmlhbmEiLCJleHAiOjE3MjIxOTY5OTIsImF1dGhvcml0aWVzIjpbIkFETUlOIl19.JTxVgHadcnn3aMbdHblZxiVHJd4ZXLl5LoO3QNX1EzI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:9191/controleUsuarios/6dabbb17-4edd-4608-9187-d828f986de2a",
+							"host": [
+								"localhost"
+							],
+							"port": "9191",
+							"path": [
+								"controleUsuarios",
+								"6dabbb17-4edd-4608-9187-d828f986de2a"
+							]
+						},
+						"description": "Deleta um funcionário específico com base no id fornecido."
+					},
+					"response": []
+				}
+			],
+			"description": "Gerenciamento de usuários, com funções de criação, listagem, atualização e deleção."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		}
+	]
+}
